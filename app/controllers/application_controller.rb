@@ -16,12 +16,14 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/img-urls' do
-    pages = ImageParser::matchingPages('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    img = Image.new('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    pages = img.matching_pages
     pages.map{ |page| page.url + '<br>' }
   end
 
   get '/img-entities' do
-    entities = ImageParser::imageEntities('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    img = Image.new('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    entities = img.entities
     entities.map{ |entity| entity.description + '<br>' }
   end
 
