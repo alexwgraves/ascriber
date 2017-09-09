@@ -12,7 +12,6 @@ class Scraper
     @url = 'http://' + @url unless url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
     @main_page = Nokogiri::HTML(open(@url))
     @urls = [URI(@url)]
-    @img_urls = []
   end
 
   # convert all URLs to absolute URLs
@@ -31,27 +30,34 @@ class Scraper
   end
 
   # add image URL to array
-  def scrape_images(img)
-    return if img.attr('src').nil?
-    img_url = convert_url(img.attr('src'))
-    @img_urls << img_url
+  def scrape_images(figure)
+    img = nil
+    figure.search('img', 'figcaption').each do |result|
+      if result.name == 'img' && !result.attr('src').nil?
+        img_url = convert_url(result.attr('src'))
+        img = Image.new(img_url)
+      elsif result.name == 'figcaption'
+        img.credit = result.text.strip unless img.nil?
+      end
+    end
+    img.flagged = true if img.credit.empty?
 
-    # printing currently just to show output
-    p img_url
+    # printing for the time being to see output
+    p img unless img.nil?
   end
 
   # recursively scrape all links and images within given website
   def scrape(page)
-    page.search('a', 'figure:img').each do |link|
-      scrape_images(link) if link.name == 'img'
+    page.search('a', 'figure').each do |link|
+      scrape_images(link) if link.name == 'figure'
       scrape_links(link) if link.name == 'a'
     end
   end
 
   # scrape all images on just the given page
   def scrape_once(page)
-    page.search('img').each do |link|
-      scrape_images(link) if link.name == 'img'
+    page.search('figure').each do |figure|
+      scrape_images(figure)
     end
   end
 

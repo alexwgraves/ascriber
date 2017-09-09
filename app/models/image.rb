@@ -1,9 +1,11 @@
 class Image
   attr_accessor(:original_url) # String, original URL of image
-  attr_accessor(:credit, :license) # Strings
+  attr_accessor(:credit, :flagged)
 
   def initialize(original_url)
     @original_url = original_url
+    @credit = ''
+    @flagged = false
   end
 
   # returns Hash of matching pages and their original pub date
