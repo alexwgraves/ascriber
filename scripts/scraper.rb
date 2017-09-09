@@ -7,7 +7,8 @@ class Scraper
   attr_accessor(:url)
 
   def initialize(url)
-    @url = url
+    @url = URI(url).to_s
+    @url = 'http://' + @url unless url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
     @main_page = Nokogiri::HTML(open(@url))
     @urls = [URI(@url)]
     @img_urls = []

@@ -8,17 +8,17 @@ class Image
 
   # returns Hash of matching pages and their original pub date
   def matching_pages
-    matching_img_urls = ImageParser::matchingPages(@original_url)
+    matching_img_urls = ImageParser.matching_pages(@original_url)
     pages = []
     matching_img_urls.each do |page|
       p "getting date for #{page.url}"
       dater = Dater.new(page.url)
-      pages << {url: page.url, pubDate: dater.earliest.to_s}
+      pages << { url: page.url, pubDate: dater.earliest.to_s }
     end
     pages
   end
 
   def entities
-    ImageParser::imageEntities(@original_url)
+    ImageParser.image_entities(@original_url)
   end
 end
