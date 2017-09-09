@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th>Image URL</th>
-      <th>Credited</th>
+      <th>Credit</th>
       <th>Flagged?</th>
     </tr>
   </thead>
@@ -10,7 +10,7 @@
     <% @scraped.each do |img| %>
     <% unless img.nil? %>
       <tr>
-        <td><%= img.original_url %></td>
+        <td><a href="<%= img.original_url %>">Go to image</a></td>
         <td><%= img.credit %></td>
         <td><%= img.flagged %></td>
       </tr>
