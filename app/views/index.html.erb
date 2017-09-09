@@ -1,8 +1,14 @@
-hey boiyeeee!
-
 <form action="/" method="post" accept-charset="utf-8">
-  <input type="text" name="url" value=""><br>
-  <input type="checkbox" name="recurse" value="">
-  <label for="recurse">Check entire site?</label><br>
-  <input class="btn btn-info" type="submit" value="Scrape">
+  <div class="row">
+    <div class="three columns">&nbsp;</div>
+    <div class="six columns">
+      <label for="url">Site or Page to Check</label>
+      <input type="text" class="u-full-width" name="url" value="" placeholder="www.nytimes.com/"><br>
+      <label class="u-pull-left">
+        <input type="checkbox" name="recurse">
+        <span>Search all pages on domain?</span>
+      </label>
+      <input type="submit" value="Scrape" class="u-pull-right">
+    </div>
+  </div>
 </form>
