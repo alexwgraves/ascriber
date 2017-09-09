@@ -7,9 +7,10 @@ class Scraper
   attr_accessor(:url, :search_entire_site)
 
   def initialize(url, recurse)
-    @url = URI(url).to_s
     @search_entire_site = recurse
-    @url = 'http://' + @url unless url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
+    uri = URI(url)
+    @url = uri.to_s
+    @url = 'http://' + @url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
     @main_page = Nokogiri::HTML(open(@url))
     @urls = [URI(@url)]
   end
