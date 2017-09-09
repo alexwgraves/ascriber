@@ -11,8 +11,9 @@ class Scraper
     uri = URI(url)
     @url = uri.to_s
     @url = 'http://' + @url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
-    @main_page = Nokogiri::HTML(open(@url))
+    @host_url = uri.host
     @urls = [URI(@url)]
+    @main_page = Nokogiri::HTML(open(@url))
   end
 
   # convert all URLs to absolute URLs
@@ -24,7 +25,7 @@ class Scraper
   def scrape_links(link)
     return if link.attr('href').nil?
     url = convert_url(link.attr('href'))
-    return unless url.include?(@url)
+    return unless url.include?(@host_url)
     return if @urls.include?(URI(url))
     @urls << URI(url)
     scrape(Nokogiri::HTML(open(url)))
@@ -38,10 +39,10 @@ class Scraper
         img_url = convert_url(result.attr('src'))
         img = Image.new(img_url)
       elsif result.name == 'figcaption'
-        img.credit = result.text.strip unless img.nil?
+        img.scrape_credit(result.text.strip) unless img.nil?
       end
     end
-    img.flagged = true if img.credit.empty?
+    img.flagged = true unless img.nil? || !img.credit.empty?
 
     # printing for the time being to see output
     p img unless img.nil?

@@ -24,11 +24,8 @@ class Image
     ImageParser.image_entities(@original_url)
   end
 
-  def author
-    # use nameable here
-  end
-
-  def license
-    # get the rest of the credit i guess?
+  def scrape_credit(credit)
+    @credit = credit.partition('Credit').last.tr(':', '').strip
+    @credit = credit.partition('Photo').last.tr(':', '').strip if @credit.empty?
   end
 end
