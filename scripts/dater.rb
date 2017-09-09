@@ -30,7 +30,6 @@ class Dater
 
   def date_list
     res = Net::HTTP.get_response(URI.parse(get_archive_url(@url)))
-    p get_archive_url(@url)
     body = res.body
     json = JSON.parse(body)
     json.shift # pop off header row

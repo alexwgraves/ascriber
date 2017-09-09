@@ -65,14 +65,7 @@ class Scraper
 
   # actually runs the scraper
   def run
-    if search_entire_site
-      scraped = scrape(@main_page)
-    else
-      scraped = scrape_once(@main_page)
-    end
-    scraped.each do |img|
-      Attributer.credit!(img) if img.flagged
-    end
-    scraped
+    return scrape(@main_page) if search_entire_site
+    scrape_once(@main_page)
   end
 end
