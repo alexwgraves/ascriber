@@ -1,6 +1,7 @@
 class Image
   attr_accessor(:original_url) # String, original URL of image
   attr_accessor(:credit, :flagged)
+  attr_accessor(:source_url)
 
   def initialize(original_url)
     @original_url = original_url
