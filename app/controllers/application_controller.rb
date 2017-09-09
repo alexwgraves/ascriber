@@ -1,11 +1,13 @@
 require 'sinatra'
-require 'googleauth'
 require 'uri'
-require './scripts/scraper.rb'
-require './scripts/dater.rb'
-
 
 ENV['GOOGLE_APPLICATION_CREDENTIALS'] = File.expand_path('../../throwaway-key.json', __FILE__)
+
+require './scripts/scraper.rb'
+require './scripts/dater.rb'
+require './scripts/image_parser.rb'
+
+
 
 class ApplicationController < Sinatra::Base
   use Rack::MethodOverride
@@ -16,36 +18,14 @@ class ApplicationController < Sinatra::Base
     erb :'index.html'
   end
 
-  get '/api' do
-    project_id = 'ascriber-179402'
-    image_path = 'http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg'
+  get '/img-urls' do
+    pages = ImageParser::matchingPages('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    pages.map{ |page| page.url }
+  end
 
-    scopes = ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/cloud-vision']
-    authorization = Google::Auth.get_application_default(scopes)
-
-    require 'google/cloud/vision'
-
-    vision = Google::Cloud::Vision.new project: project_id
-    # vision.authorization = authorization
-    image = vision.image image_path
-
-    web = image.web
-
-    returnstr = '<b>URLS:</b><br>'
-
-    web.pages_with_matching_images.each do |page|
-      p page
-      returnstr += page.url + '<br>'
-    end
-    returnstr += "<br><br> <b>ENTITIES:</b><br>"
-
-    p web.entities
-
-    web.entities.each do |entity|
-      returnstr += entity.description + '<br>'
-    end
-
-    returnstr
+  get '/img-entities' do
+    entities = ImageParser::imageEntities('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    entities.map{ |entity| entity.description }
   end
 
   get '/url' do
