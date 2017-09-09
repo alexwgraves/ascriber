@@ -2,6 +2,8 @@ require 'sinatra'
 Dir.glob('./scripts/*.rb').each { |file| require file }
 
 ENV['GOOGLE_APPLICATION_CREDENTIALS'] = File.expand_path('../../throwaway-key.json', __FILE__)
+ENV['GOOGLE_CUSTOM_SEARCH_KEY'] = 'AIzaSyBhjYOx43kHpWJhUWKCE-5JV2O91K0hQ5I'
+
 
 class ApplicationController < Sinatra::Base
   use Rack::MethodOverride
@@ -23,13 +25,20 @@ class ApplicationController < Sinatra::Base
     entities.map { |entity| entity.description + '<br>' }
   end
 
+  get '/img-similar' do
+    img = Image.new('http://snworksceo.imgix.net/dpn/7b303678-f097-4996-90da-1489b63a5be2.sized-1000x1000.png')
+    img.similar_images.to_s
+  end
+
   get '/url' do
     dater = Dater.new('www.thedp.com')
     dater.earliest
   end
 
   post '/' do
-    scraper = Scraper.new(params[:url])
+    recurse = true
+    recurse = false if params[:recurse].nil?
+    scraper = Scraper.new(params[:url], recurse)
     scraper.run
     erb :'index.html'
   end
