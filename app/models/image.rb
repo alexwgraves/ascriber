@@ -21,4 +21,15 @@ class Image
   def entities
     ImageParser.image_entities(@original_url)
   end
+
+  def similar_images
+    entity = entities[0].description
+    p "searching for images of #{entity}"
+    search_url = "https://www.googleapis.com/customsearch/v1?q=#{entity}&cx=015751805172374965118%3Abeunjl9htrk&fileType=png%2Cgif%2Cjpg%2Cjpeg&num=5&rights=cc_publicdomain%2C+cc_attribute%2C+cc_sharealike&searchType=image&key=#{ENV['GOOGLE_CUSTOM_SEARCH_KEY']}"
+    res = Net::HTTP.get_response(URI.parse(search_url))
+    body = res.body
+    json = JSON.parse(body)
+    json
+  end
+
 end
