@@ -1,5 +1,7 @@
 require 'sinatra'
 require 'googleauth'
+require 'uri'
+require './scripts/scraper.rb'
 require './scripts/dater.rb'
 
 
@@ -51,5 +53,13 @@ class ApplicationController < Sinatra::Base
     dater.run
   end
 
+  post '/' do
+    uri = URI(params[:url])
+    url = uri.to_s
+    url = 'http://' + url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+    scraper = Scraper.new(url)
+    scraper.run
+    erb :'index.html'
+  end
 
 end
