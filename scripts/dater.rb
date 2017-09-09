@@ -21,15 +21,15 @@ class Dater
 
   def initialize(url)
     @url = url
-    @source = "Wayback Machine"
+    @source = 'Wayback Machine'
   end
 
-  def getArchiveURI(url)
+  def get_archive_url(url)
     "http://web.archive.org/web/timemap/json/#{url}"
   end
 
-  def getDateList
-    res = Net::HTTP.get_response(URI.parse(getArchiveURI(@url)))
+  def date_list
+    res = Net::HTTP.get_response(URI.parse(get_archive_url(@url)))
     body = res.body
     json = JSON.parse(body)
     json.shift # pop off header row
@@ -38,7 +38,7 @@ class Dater
   end
 
   def run
-    earliest = getDateList.min
+    earliest = date_list.min
     "#{url} was first found on #{@source} on #{earliest}"
   end
 end

@@ -8,10 +8,10 @@ class Image
 
   # returns Hash of matching pages and their original pub date
   def matching_pages
-    matching_img_urls = ImageParser::matchingPages(@original_url)
+    ImageParser.matching_pages(@original_url)
   end
 
   def entities
-    ImageParser::imageEntities('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
+    ImageParser.image_entities('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
   end
 end
