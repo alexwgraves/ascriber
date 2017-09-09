@@ -36,7 +36,9 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/' do
-    scraper = Scraper.new(params[:url])
+    recurse = true
+    recurse = false if params[:recurse].nil?
+    scraper = Scraper.new(params[:url], recurse)
     scraper.run
     erb :'index.html'
   end

@@ -1,9 +1,11 @@
 class Image
   attr_accessor(:original_url) # String, original URL of image
-  attr_accessor(:author, :license) # Strings
+  attr_accessor(:credit, :flagged)
 
   def initialize(original_url)
     @original_url = original_url
+    @credit = ''
+    @flagged = false
   end
 
   # returns Hash of matching pages and their original pub date
@@ -22,6 +24,11 @@ class Image
     ImageParser.image_entities(@original_url)
   end
 
+  def scrape_credit(credit)
+    @credit = credit.partition('Credit').last.tr(':', '').strip
+    @credit = credit.partition('Photo').last.tr(':', '').strip if @credit.empty?
+  end
+
   def similar_images
     entity = entities[0].description
     p "searching for images of #{entity}"
@@ -31,5 +38,4 @@ class Image
     json = JSON.parse(body)
     json
   end
-
 end
