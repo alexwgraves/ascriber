@@ -13,9 +13,8 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/img-urls' do
-    img = Image.new('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
-    pages = img.matching_pages
-    pages.map { |page| page.url + '<br>' }
+    img = Image.new('http://snworksceo.imgix.net/dpn/7b303678-f097-4996-90da-1489b63a5be2.sized-1000x1000.png')
+    img.matching_pages.to_s
   end
 
   get '/img-entities' do
@@ -26,7 +25,7 @@ class ApplicationController < Sinatra::Base
 
   get '/url' do
     dater = Dater.new('www.thedp.com')
-    dater.run
+    dater.earliest
   end
 
   post '/' do

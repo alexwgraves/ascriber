@@ -37,8 +37,7 @@ class Dater
     timestamps
   end
 
-  def run
-    earliest = date_list.min
-    "#{url} was first found on #{@source} on #{earliest}"
+  def earliest
+    date_list.min
   end
 end
