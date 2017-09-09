@@ -1,6 +1,6 @@
 class Image
   attr_accessor(:original_url) # String, original URL of image
-  attr_accessor(:author, :license) # Strings
+  attr_accessor(:credit, :license) # Strings
 
   def initialize(original_url)
     @original_url = original_url
@@ -20,5 +20,13 @@ class Image
 
   def entities
     ImageParser.image_entities(@original_url)
+  end
+
+  def author
+    # use nameable here
+  end
+
+  def license
+    # get the rest of the credit i guess?
   end
 end

@@ -4,10 +4,11 @@ require 'uri'
 
 # creates a scraper object to scrape all images within the given website
 class Scraper
-  attr_accessor(:url)
+  attr_accessor(:url, :search_entire_site)
 
-  def initialize(url)
+  def initialize(url, recurse)
     @url = URI(url).to_s
+    @search_entire_site = recurse
     @url = 'http://' + @url unless url.is_a?(URI::HTTP) || url.is_a?(URI::HTTPS)
     @main_page = Nokogiri::HTML(open(@url))
     @urls = [URI(@url)]
@@ -41,14 +42,25 @@ class Scraper
 
   # recursively scrape all links and images within given website
   def scrape(page)
-    page.search('a', 'img').each do |link|
+    page.search('a', 'figure:img').each do |link|
       scrape_images(link) if link.name == 'img'
       scrape_links(link) if link.name == 'a'
     end
   end
 
+  # scrape all images on just the given page
+  def scrape_once(page)
+    page.search('img').each do |link|
+      scrape_images(link) if link.name == 'img'
+    end
+  end
+
   # actually runs the scraper
   def run
-    scrape(@main_page)
+    if search_entire_site
+      scrape(@main_page)
+    else
+      scrape_once(@main_page)
+    end
   end
 end
