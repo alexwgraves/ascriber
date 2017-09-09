@@ -11,7 +11,7 @@ class Scraper
     uri = URI(url)
     @url = uri.to_s
     @url = 'http://' + @url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
-    @host_url = uri.host
+    @host_url = URI(@url).host
     @urls = [URI(@url)]
     @main_page = Nokogiri::HTML(open(@url))
   end
@@ -45,30 +45,27 @@ class Scraper
     img.flagged = true unless img.nil? || !img.credit.empty?
 
     # printing for the time being to see output
-    p img unless img.nil?
+    img unless img.nil?
   end
 
   # recursively scrape all links and images within given website
   def scrape(page)
+    scraped = []
     page.search('a', 'figure').each do |link|
-      scrape_images(link) if link.name == 'figure'
+      scraped << scrape_images(link) if link.name == 'figure'
       scrape_links(link) if link.name == 'a'
     end
+    scraped
   end
 
   # scrape all images on just the given page
   def scrape_once(page)
-    page.search('figure').each do |figure|
-      scrape_images(figure)
-    end
+    page.search('figure').map { |figure| scrape_images(figure) }
   end
 
   # actually runs the scraper
   def run
-    if search_entire_site
-      scrape(@main_page)
-    else
-      scrape_once(@main_page)
-    end
+    return scrape(@main_page) if search_entire_site
+    scrape_once(@main_page)
   end
 end

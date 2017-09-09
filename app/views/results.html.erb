@@ -1,0 +1,20 @@
+<table class="u-full-width">
+  <thead>
+    <tr>
+      <th>Image URL</th>
+      <th>Credited</th>
+      <th>Flagged?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scraped.each do |img| %>
+    <% unless img.nil? %>
+      <tr>
+        <td><%= img.original_url %></td>
+        <td><%= img.credit %></td>
+        <td><%= img.flagged %></td>
+      </tr>
+    <% end %>
+    <% end %>
+  </tbody>
+</table>
