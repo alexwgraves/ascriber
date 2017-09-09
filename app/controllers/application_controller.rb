@@ -39,7 +39,7 @@ class ApplicationController < Sinatra::Base
     recurse = true
     recurse = false if params[:recurse].nil?
     scraper = Scraper.new(params[:url], recurse)
-    scraper.run
-    erb :'index.html'
+    @scraped = scraper.run
+    erb :'results.html'
   end
 end
