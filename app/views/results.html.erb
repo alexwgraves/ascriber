@@ -22,17 +22,3 @@ Results for <a href="<%= @url %>"><%= @url %></a>
     <% end %>
   </tbody>
 </table>
-
-
-<script type="text/javascript">
-var similars = document.getElementsByClassName("find-similar");
-
-var myFunction = function() {
-  var ogUrl = this.getAttribute("data-img-url");
-  alert(ogUrl);
-};
-
-for (var i = 0; i < similars.length; i++) {
-  similars[i].addEventListener('click', myFunction, false);
-}
-</script>

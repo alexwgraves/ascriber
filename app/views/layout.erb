@@ -37,5 +37,27 @@
         Built by Andrew Fischer, Cyrena Gonzalez, &amp; Alex Graves.
       </small>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var similars = document.getElementsByClassName("find-similar");
+      $('tbody').append('<tr><td id="related-images" colspan="4"></td></tr>');
+
+      for (var i = 0; i < similars.length; i++) {
+        similars[i].addEventListener('click', function() {
+          $.post( "/similar", { search_url: this.getAttribute("data-img-url") } ).done(function( data ) {
+            data = JSON.parse(data)
+            data = data['items']
+            for (var i = 0; i < data.length; i++) {
+              img = data[i]['image'];
+              var thumb = data[i]['image']['thumbnailLink']
+              var full = data[i]['link']
+              $('#related-images').append('<a href="' + full + '"><img src="' + thumb + '"></a>')
+            }
+            // console.log( "Data Loaded: " + JSON.stringify(data) );
+          });;
+        });
+      }
+    </script>
   </body>
 </html>
