@@ -13,25 +13,16 @@ class ApplicationController < Sinatra::Base
     erb :'index.html'
   end
 
-  get '/img-urls' do
-    img = Image.new('http://snworksceo.imgix.net/dpn/7b303678-f097-4996-90da-1489b63a5be2.sized-1000x1000.png')
-    img.matching_pages.to_s
+  post '/similar' do
+    p params['search_url']
+    img = Image.new(params['search_url'])
+    img.similar_images
   end
 
-  get '/img-entities' do
-    img = Image.new('http://snworksceo.imgix.net/dpn/5f93f181-9891-46b2-b3a8-b950b6bf43b9.sized-1000x1000.jpg')
-    entities = img.entities
-    entities.map { |entity| entity.description + '<br>' }
-  end
-
-  get '/img-similar' do
-    img = Image.new('http://snworksceo.imgix.net/dpn/7b303678-f097-4996-90da-1489b63a5be2.sized-1000x1000.png')
-    img.similar_images.to_s
-  end
-
-  get '/url' do
-    dater = Dater.new('www.thedp.com')
-    dater.earliest
+  post '/source' do
+    p params['search_url']
+    img = Image.new(params['search_url'])
+    Attributer.credit_string(img.matching_pages)
   end
 
   post '/' do
