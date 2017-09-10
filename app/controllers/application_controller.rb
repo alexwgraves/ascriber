@@ -19,9 +19,10 @@ class ApplicationController < Sinatra::Base
     img.similar_images
   end
 
-  get '/url' do
-    dater = Dater.new('www.thedp.com')
-    dater.earliest
+  post '/source' do
+    p params['search_url']
+    img = Image.new(params['search_url'])
+    Attributer.credit_string(img.matching_pages)
   end
 
   post '/' do
