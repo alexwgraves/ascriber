@@ -87,15 +87,19 @@
       for (var i = 0; i < similars.length; i++) {
         similars[i].addEventListener('click', function(e) {
           e.target.innerHTML = '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'
-          $('tbody').append('<tr><td id="related-images" colspan="4"></td></tr>');
-          $.post( "/similar", { search_url: this.getAttribute("data-img-url") } ).done(function( data ) {
-            data = JSON.parse(data)
+          var row = $(e.target).closest('tr');
+          var url = this.getAttribute("data-img-url");
+          var date = (new Date).getTime();
+          $(row).after('<tr><td id="related-images-' + date + '" colspan="4"></td></tr>');
+
+          $.post( "/similar", { search_url: url } ).done(function( data ) {
+            var data = JSON.parse(data)
             data = data['items']
             for (var i = 0; i < data.length; i++) {
               img = data[i]['image'];
               var thumb = data[i]['image']['thumbnailLink']
               var full = data[i]['link']
-              $('#related-images').append('<a href="' + full + '"><img src="' + thumb + '"></a>')
+              $('#related-images-' + date).append('<a href="' + full + '"><img src="' + thumb + '"></a>')
               e.target.innerHTML = 'Done!'
             }
           });;
