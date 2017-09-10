@@ -13,6 +13,7 @@ class Scraper
     @urls = [URI(@url)]
     @img_urls = []
     @main_page = Nokogiri::HTML(open(@url))
+    @scraped = []
   end
 
   # convert all URLs to absolute URLs
@@ -49,12 +50,11 @@ class Scraper
 
   # recursively scrape all links and images within given website
   def scrape(page)
-    scraped = []
     page.search('a', 'figure').each do |link|
-      scraped << scrape_images(link) if link.name == 'figure'
+      @scraped << scrape_images(link) if link.name == 'figure'
       scrape_links(link) if link.name == 'a'
     end
-    scraped
+    @scraped
   end
 
   # scrape all images on just the given page
