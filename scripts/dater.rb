@@ -1,20 +1,5 @@
 require 'net/http'
 
-# [
-#  "urlkey",
-#  "timestamp",
-#  "original",
-#  "mimetype",
-#  "statuscode",
-#  "digest",
-#  "redirect",
-#  "robotflags",
-#  "length",
-#  "offset",
-#  "filename"
-# ],
-# Timestamp is in format yyyyMMddhhmmss
-
 class Dater
   attr_accessor(:source)
   attr_accessor(:url)

@@ -83,7 +83,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
       var similars = document.getElementsByClassName("find-similar");
-
       for (var i = 0; i < similars.length; i++) {
         similars[i].addEventListener('click', function(e) {
           e.target.innerHTML = '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'
@@ -100,21 +99,22 @@
               var thumb = data[i]['image']['thumbnailLink']
               var full = data[i]['link']
               $('#related-images-' + date).append('<a href="' + full + '"><img src="' + thumb + '"></a>')
-              e.target.innerHTML = 'Done!'
+              $(e.target).after('Done!');
+              $(e.target).remove();
             }
           });;
         });
       }
 
       var sourceLinks = document.getElementsByClassName("find-source");
-
       for (var i = 0; i < sourceLinks.length; i++) {
         sourceLinks[i].addEventListener('click', function(e) {
           e.target.innerHTML = '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'
           $.post( "/source", { search_url: this.getAttribute("data-img-url") } ).done(function( data ) {
             console.log(data)
             console.log(this);
-            e.target.innerHTML = data;
+            $(e.target).after(data);
+            $(e.target).remove();
           });
         });
       }
