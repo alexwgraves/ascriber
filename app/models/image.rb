@@ -1,3 +1,6 @@
+require 'googleauth'
+require 'google/cloud/language'
+
 class Image
   attr_accessor(:original_url) # String, original URL of image
   attr_accessor(:credit, :flagged)
@@ -25,8 +28,15 @@ class Image
   end
 
   def scrape_credit(credit)
-    @credit = credit.partition('Credit').last.tr(':', '').strip
-    @credit = credit.partition('Photo').last.tr(':', '').strip if @credit.empty?
+    credit.split(/[\t\r\n\f]/).each do |text|
+      text_down = text.downcase
+      @credit += text.strip if text_down.include?('photo:') || text_down.include?('credit')
+    end
+    credit_manual(credit) if @credit.casecmp('credit').zero?
+  end
+
+  def credit_manual(credit)
+    @credit = credit.partition('Credit').last.strip
   end
 
   def similar_images
@@ -37,5 +47,22 @@ class Image
     body = res.body
     json = JSON.parse(body)
     json
+  end
+
+  def authors
+    language = init_language
+    entities = language.document(@credit).entities
+    authors = []
+    entities.each do |entity|
+      authors << entity.name if entity.type == :PERSON
+    end
+    authors
+  end
+
+  def init_language
+    project_id = 'ascriber-179402'
+    scopes = ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/cloud-vision']
+    Google::Auth.get_application_default(scopes)
+    Google::Cloud::Language.new project: project_id
   end
 end

@@ -8,9 +8,7 @@ class Scraper
 
   def initialize(url, recurse)
     @search_entire_site = recurse
-    uri = URI(url)
-    @url = uri.to_s
-    @url = 'http://' + @url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+    @url = url
     @host_url = URI(@url).host
     @urls = [URI(@url)]
     @img_urls = []

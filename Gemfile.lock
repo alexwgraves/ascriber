@@ -10,6 +10,9 @@ GEM
       googleauth (~> 0.5.1)
     google-cloud-env (1.0.1)
       faraday (~> 0.11)
+    google-cloud-language (0.27.1)
+      google-cloud-core (~> 1.0)
+      google-gax (~> 0.8.2)
     google-cloud-vision (0.25.0)
       google-cloud-core (~> 1.0)
       google-gax (~> 0.8.0)
@@ -68,6 +71,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  google-cloud-language
   google-cloud-vision
   googleauth
   nokogiri
