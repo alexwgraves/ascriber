@@ -50,19 +50,13 @@ class Image
   end
 
   def authors
-    language = init_language
+    project_id = 'ascriber-179402'
+    language = Google::Cloud::Language.new project: project_id
     entities = language.document(@credit).entities
     authors = []
     entities.each do |entity|
       authors << entity.name if entity.type == :PERSON
     end
     authors
-  end
-
-  def init_language
-    project_id = 'ascriber-179402'
-    scopes = ['https://www.googleapis.com/auth/cloud-platform', 'https://www.googleapis.com/auth/cloud-vision']
-    Google::Auth.get_application_default(scopes)
-    Google::Cloud::Language.new project: project_id
   end
 end
