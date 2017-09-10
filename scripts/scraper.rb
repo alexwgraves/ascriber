@@ -40,6 +40,7 @@ class Scraper
         next if @img_urls.include?(img_url)
         @img_urls << img_url
         img = Image.new(img_url)
+        img.site_url = @host_url
       elsif result.name == 'figcaption'
         img.scrape_credit(result.text.strip) unless img.nil?
       end

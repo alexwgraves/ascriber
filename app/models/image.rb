@@ -2,6 +2,7 @@ require 'google/cloud/language'
 
 class Image
   attr_accessor(:original_url) # String, original URL of image
+  attr_accessor(:site_url) # for the host of the user's inputted URL
   attr_accessor(:credit, :flagged)
 
   def initialize(original_url)
@@ -19,7 +20,17 @@ class Image
       dater = Dater.new(page.url)
       pages << { url: page.url, pubDate: dater.earliest }
     end
+    same_source?(pages)
     pages
+  end
+
+  def same_source?(pages)
+    earliest = pages.reject { |m| m[:pubDate].nil? }.sort_by { |m| m[:pubDate] }
+    probable_og = earliest.first
+    og_host = URI(probable_og[:url]).host
+    p og_host
+    p @site_url
+    @flagged = false if og_host == @site_url
   end
 
   def entities
