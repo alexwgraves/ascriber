@@ -28,8 +28,6 @@ class Image
     earliest = pages.reject { |m| m[:pubDate].nil? }.sort_by { |m| m[:pubDate] }
     probable_og = earliest.first
     og_host = URI(probable_og[:url]).host
-    p og_host
-    p @site_url
     @flagged = false if og_host == @site_url
   end
 
