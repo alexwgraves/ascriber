@@ -1,4 +1,3 @@
-require 'googleauth'
 require 'google/cloud/language'
 
 class Image
@@ -18,7 +17,7 @@ class Image
     matching_img_urls.each do |page|
       p "getting date for #{page.url}"
       dater = Dater.new(page.url)
-      pages << { url: page.url, pubDate: dater.earliest.to_s }
+      pages << { url: page.url, pubDate: dater.earliest }
     end
     pages
   end
@@ -58,5 +57,9 @@ class Image
       authors << entity.name if entity.type == :PERSON
     end
     authors
+  end
+
+  def source_links
+    Attributer.credit_string(matching_pages)
   end
 end

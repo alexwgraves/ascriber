@@ -33,7 +33,7 @@ class Dater
     body = res.body
     json = JSON.parse(body)
     json.shift # pop off header row
-    timestamps = json.map { |archive| Date.parse(archive[1]) }
+    timestamps = json.map { |archive| archive[1].nil? ? Date.now : Date.parse(archive[1]) }
     timestamps
   end
 

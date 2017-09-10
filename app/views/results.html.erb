@@ -4,6 +4,7 @@ Results for <a href="<%= @url %>"><%= @url %></a>
   <thead>
     <tr>
       <th>Image URL</th>
+      <th>Attribution</th>
       <th>Credit</th>
       <th>Flagged?</th>
     </tr>
@@ -13,7 +14,8 @@ Results for <a href="<%= @url %>"><%= @url %></a>
     <% unless img.nil? %>
       <tr>
         <td><a href="<%= img.original_url %>">Go to image</a></td>
-        <td><%= img.credit %></td>
+        <td><%= img.credit.empty? ? "No credit found" : img.credit %></td>
+        <td><%= img.flagged ? img.source_links : 'OK' %></td>
         <td><%= img.flagged %></td>
       </tr>
     <% end %>

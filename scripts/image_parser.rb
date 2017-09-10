@@ -5,8 +5,7 @@ class ImageParser
   def self.matching_pages(url)
     image = get_image_props(url)
     web = image.web
-
-    web.pages_with_matching_images
+    web.pages_with_matching_images.first(15)
   end
 
   def self.image_entities(url)
