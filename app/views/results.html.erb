@@ -16,7 +16,7 @@ Results for <a href="<%= @url %>"><%= @url %></a>
       <tr>
         <td><a href="<%= img.original_url %>" target="_blank">Go to image</a></td>
         <td><%= img.credit.empty? ? "No credit found" : img.credit %></td>
-        <td><%= img.flagged ? img.source_links : 'OK' %></td>
+        <td><%= img.flagged ? img.source_links : 'Looks good!' %></td>
         <td>
           <% if img.flagged %>
             yes
