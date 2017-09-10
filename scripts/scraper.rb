@@ -8,11 +8,10 @@ class Scraper
 
   def initialize(url, recurse)
     @search_entire_site = recurse
-    uri = URI(url)
-    @url = uri.to_s
-    @url = 'http://' + @url unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+    @url = url
     @host_url = URI(@url).host
     @urls = [URI(@url)]
+    @img_urls = []
     @main_page = Nokogiri::HTML(open(@url))
   end
 
@@ -37,14 +36,14 @@ class Scraper
     figure.search('img', 'figcaption').each do |result|
       if result.name == 'img' && !result.attr('src').nil?
         img_url = convert_url(result.attr('src'))
+        next if @img_urls.include?(img_url)
+        @img_urls << img_url
         img = Image.new(img_url)
       elsif result.name == 'figcaption'
         img.scrape_credit(result.text.strip) unless img.nil?
       end
     end
     img.flagged = true unless img.nil? || !img.credit.empty?
-
-    # printing for the time being to see output
     img unless img.nil?
   end
 
