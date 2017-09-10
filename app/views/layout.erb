@@ -14,6 +14,52 @@
         text-decoration: none;
         color: #60D;
       }
+
+      .flagged {
+        background-color: rgba(255, 5, 5, .15)
+      }
+
+      .spinner {
+        margin: 0px auto -10px;
+        width: 70px;
+        text-align: center;
+      }
+
+      .spinner > div {
+        width: 18px;
+        height: 18px;
+        background-color: #333;
+
+        border-radius: 100%;
+        display: inline-block;
+        -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+      }
+
+      .spinner .bounce1 {
+        -webkit-animation-delay: -0.32s;
+        animation-delay: -0.32s;
+      }
+
+      .spinner .bounce2 {
+        -webkit-animation-delay: -0.16s;
+        animation-delay: -0.16s;
+      }
+
+      @-webkit-keyframes sk-bouncedelay {
+        0%, 80%, 100% { -webkit-transform: scale(0) }
+        40% { -webkit-transform: scale(1.0) }
+      }
+
+      @keyframes sk-bouncedelay {
+        0%, 80%, 100% {
+          -webkit-transform: scale(0);
+          transform: scale(0);
+        } 40% {
+          -webkit-transform: scale(1.0);
+          transform: scale(1.0);
+        }
+      }
     </style>
   </head>
   <body>
@@ -33,5 +79,45 @@
         Built by Andrew Fischer, Cyrena Gonzalez, &amp; Alex Graves.
       </small>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var similars = document.getElementsByClassName("find-similar");
+      for (var i = 0; i < similars.length; i++) {
+        similars[i].addEventListener('click', function(e) {
+          e.target.innerHTML = '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'
+          var row = $(e.target).closest('tr');
+          var url = this.getAttribute("data-img-url");
+          var date = (new Date).getTime();
+          $(row).after('<tr><td id="related-images-' + date + '" colspan="4"></td></tr>');
+
+          $.post( "/similar", { search_url: url } ).done(function( data ) {
+            var data = JSON.parse(data)
+            data = data['items']
+            for (var i = 0; i < data.length; i++) {
+              img = data[i]['image'];
+              var thumb = data[i]['image']['thumbnailLink']
+              var full = data[i]['link']
+              $('#related-images-' + date).append('<a href="' + full + '"><img src="' + thumb + '"></a>')
+              $(e.target).after('Done!');
+              $(e.target).remove();
+            }
+          });;
+        });
+      }
+
+      var sourceLinks = document.getElementsByClassName("find-source");
+      for (var i = 0; i < sourceLinks.length; i++) {
+        sourceLinks[i].addEventListener('click', function(e) {
+          e.target.innerHTML = '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>'
+          $.post( "/source", { search_url: this.getAttribute("data-img-url") } ).done(function( data ) {
+            console.log(data)
+            console.log(this);
+            $(e.target).after(data);
+            $(e.target).remove();
+          });
+        });
+      }
+    </script>
   </body>
 </html>

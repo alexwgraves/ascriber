@@ -1,5 +1,4 @@
 class Attributer
-
   def self.credit_string(matches)
     first = matches.first[:url]
     earliest = matches.reject { |m| m[:pubDate].nil? }.sort_by { |m| m[:pubDate] }

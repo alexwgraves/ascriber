@@ -6,17 +6,17 @@ Results for <a href="<%= @url %>"><%= @url %></a>
       <th>Image URL</th>
       <th>Attribution</th>
       <th>Credit</th>
-      <th>Flagged?</th>
+      <th>CC Image Search</th>
     </tr>
   </thead>
   <tbody>
     <% @scraped.each do |img| %>
     <% unless img.nil? %>
-      <tr>
+      <tr <%= "class='flagged'" if img.flagged %>>
         <td><a href="<%= img.original_url %>">Go to image</a></td>
         <td><%= img.credit.empty? ? "No credit found" : img.credit %></td>
-        <td><%= img.flagged ? img.source_links : 'OK' %></td>
-        <td><%= img.flagged %></td>
+        <td><%= img.flagged ? "<a data-img-url='#{img.original_url}' class='find-source' href='#'>Find Potential Source</a>" : '&#10004;' %></td>
+        <td><a class='find-similar' data-img-url='<%= img.original_url %>' href="#">Find Similar</a></td>
       </tr>
     <% end %>
     <% end %>
