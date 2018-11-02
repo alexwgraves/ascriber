@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'nokogiri'
-gem 'google-cloud-vision'
 gem 'google-cloud-language'
+gem 'google-cloud-vision'
 gem 'googleauth'
+gem 'nokogiri', '>= 1.8.2'
+gem 'sinatra', '>= 2.0.2'
